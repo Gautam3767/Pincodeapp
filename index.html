@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pincode Directory</title>
+</head>
+<body>
+    <h1>Search Pincode</h1>
+    <form id="search-form">
+        <input type="text" id="pincode" placeholder="Pincode">
+        <input type="text" id="district" placeholder="District">
+        <input type="text" id="state" placeholder="State">
+        <input type="text" id="locality" placeholder="Locality">
+        <button type="submit">Search</button>
+    </form>
+    <div id="results"></div>
+
+    <script>
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const pincode = document.getElementById('pincode').value;
+            const district = document.getElementById('district').value;
+            const state = document.getElementById('state').value;
+            const locality = document.getElementById('locality').value;
+
+            fetch(`/pincodes?pincode=${pincode}&district=${district}&state=${state}&locality=${locality}`)
+                .then(response => response.json())
+                .then(data => {
+                    const resultsDiv = document.getElementById('results');
+                    resultsDiv.innerHTML = data.map(p => `<p>${p.officename}, ${p.districtname}, ${p.statename} - ${p.pincode}</p>`).join('');
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
